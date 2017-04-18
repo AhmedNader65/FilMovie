@@ -17,13 +17,19 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import ahmed.FilMovie.R;
 import ahmed.FilMovie.databinding.ActivityDetailsBinding;
+import ahmed.FilMovie.models.Actor;
 import ahmed.FilMovie.models.Movie;
+import ahmed.FilMovie.network.NetworkUtils;
 
 import static ahmed.FilMovie.models.Movie.Genres;
 
-public class DetailsActivity extends AppCompatActivity {
+public class DetailsActivity extends AppCompatActivity implements NetworkUtils.OnCompleteFetchingData {
     ActivityDetailsBinding binding;
     boolean isShow = false;
 
@@ -73,6 +79,16 @@ public class DetailsActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+        // GET CAST METHOD
+        getCast(movie.getId());
+    }
+
+    private void getCast(int id) {
+        String url = NetworkUtils.getUrl(this, "http://api.themoviedb.org/3/movie", new String[]{String.valueOf(id), "credits"});
+        NetworkUtils getDataObject = new NetworkUtils(this);
+        getDataObject.getDataByUrl(this, url);
     }
 
     private void bindDate(Movie movie){
@@ -125,5 +141,54 @@ public class DetailsActivity extends AppCompatActivity {
         binding.included.countValueTv.setTypeface(type2);
         binding.included.genresValueTv.setTypeface(type2);
 
+    }
+
+    @Override
+    public void onCompleted(JSONObject result) throws JSONException {
+        JSONArray cast = result.getJSONArray("cast");
+        if (cast.length() > 0) {
+            binding.included.castProgressbar.setVisibility(View.GONE);
+            binding.included.castLayout.setVisibility(View.VISIBLE);
+            for (int i = 0; i <= 4; i++) {
+                JSONObject actorObj = cast.getJSONObject(i);
+                int id = actorObj.getInt("id");
+                String name = actorObj.getString("name");
+                String characterName = actorObj.getString("character");
+                String profPic = actorObj.getString("profile_path");
+                Actor newActor = new Actor(id, name, characterName, profPic);
+                switch (i) {
+                    case 0:
+                        binding.included.name1.setText(newActor.getName());
+                        binding.included.characterName1.setText(newActor.getCharacterName());
+                        Picasso.with(this).load("http://image.tmdb.org/t/p/w185/" + newActor.getPicUrl()).into(binding.included.profileImage1);
+                        break;
+
+                    case 1:
+                        binding.included.name2.setText(newActor.getName());
+                        binding.included.characterName2.setText(newActor.getCharacterName());
+                        Picasso.with(this).load("http://image.tmdb.org/t/p/w185/" + newActor.getPicUrl()).into(binding.included.profileImage2);
+                        break;
+
+                    case 2:
+                        binding.included.name3.setText(newActor.getName());
+                        binding.included.characterName3.setText(newActor.getCharacterName());
+                        Picasso.with(this).load("http://image.tmdb.org/t/p/w185/" + newActor.getPicUrl()).into(binding.included.profileImage3);
+                        break;
+
+                    case 3:
+                        binding.included.name4.setText(newActor.getName());
+                        binding.included.characterName4.setText(newActor.getCharacterName());
+                        Picasso.with(this).load("http://image.tmdb.org/t/p/w185/" + newActor.getPicUrl()).into(binding.included.profileImage4);
+                        break;
+
+                    case 4:
+                        binding.included.name5.setText(newActor.getName());
+                        binding.included.characterName5.setText(newActor.getCharacterName());
+                        Picasso.with(this).load("http://image.tmdb.org/t/p/w185/" + newActor.getPicUrl()).into(binding.included.profileImage5);
+                        break;
+
+                }
+            }
+        }
     }
 }
