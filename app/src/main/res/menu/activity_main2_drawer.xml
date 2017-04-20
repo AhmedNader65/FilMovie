@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/onFire"
+            android:icon="@drawable/ic_onfire"
+            android:title="On Fire"/>
+        <item
+            android:id="@+id/mostPopular"
+            android:icon="@drawable/ic_popular"
+            android:title="Most Popular"/>
+        <item
+            android:id="@+id/fav"
+            android:icon="@drawable/ic_favorites"
+            android:title="Favorites"/>
+        </group>
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/Adventure"
+            android:title="Adventure"/>
+        <item
+            android:id="@+id/Animation"
+            android:title="Animation"/>
+        <item
+            android:id="@+id/Comedy"
+            android:title="Comedy"/>
+        <item
+            android:id="@+id/Drama"
+            android:title="Drama"/>
+        <item
+            android:id="@+id/History"
+            android:title="History"/>
+        <item
+            android:id="@+id/Horror"
+            android:title="Horror"/>
+        <item
+            android:id="@+id/Romance"
+            android:title="Romance"/>
+        <item
+            android:id="@+id/ScienceFiction"
+            android:title="Science Fiction"/>
+        <item
+            android:id="@+id/TVMovie"
+            android:title="TV Movie"/>
+    </group>
+</menu>

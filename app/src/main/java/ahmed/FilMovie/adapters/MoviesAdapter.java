@@ -47,6 +47,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         holder.bindData(mMoviesList.get(position));
     }
 
+    public void clear() {
+        int size = this.mMoviesList.size();
+        this.mMoviesList.clear();
+        notifyItemRangeRemoved(0, size);
+    }
     @Override
     public int getItemCount() {
         return mMoviesList == null? 0:mMoviesList.size();
@@ -85,5 +90,6 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MoviesView
         public void onClick(View view) {
             onClickItem.onMovieClick(mMoviesList.get(getAdapterPosition()));
         }
+
     }
 }

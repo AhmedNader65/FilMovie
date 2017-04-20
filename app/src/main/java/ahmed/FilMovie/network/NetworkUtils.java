@@ -21,12 +21,12 @@ import ahmed.FilMovie.R;
 public class NetworkUtils {
     private OnCompleteFetchingData onCompleteFetchingData;
     public interface OnCompleteFetchingData{
-        void onCompleted(JSONObject result) throws JSONException;
+        void onCompleted(JSONObject result,String key) throws JSONException;
     }
     public NetworkUtils(OnCompleteFetchingData onComplete){
         onCompleteFetchingData = onComplete;
     }
-    public String getDataByUrl(Context context,String url ){
+    public String getDataByUrl(Context context, String url , final String key){
 
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -34,7 +34,7 @@ public class NetworkUtils {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            onCompleteFetchingData.onCompleted(response);
+                            onCompleteFetchingData.onCompleted(response,key);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -53,11 +53,18 @@ public class NetworkUtils {
         return null;
     }
 
-    public static String getUrl(Context context,String defultUrl,String path) {
-        Uri uri = Uri.parse(defultUrl)
-                .buildUpon()
-                .appendPath(path)
-                .appendQueryParameter("api_key",context.getString(R.string.api_key)).build();
+    public static String getUrl(Context context,String defaultUrl,String[] path,String[] queriesKey,String[] queriesValue) {
+        Uri.Builder uriBuilder = Uri.parse(defaultUrl)
+                .buildUpon();
+
+        for(int i = 0 ; i < path.length;i++)
+            uriBuilder.appendPath(path[i]);
+        uriBuilder.appendQueryParameter("api_key",context.getString(R.string.api_key));
+        if(queriesKey!=null){
+            for(int i = 0 ; i < queriesKey.length;i++)
+                uriBuilder.appendQueryParameter(queriesKey[i],queriesValue[i]);
+        }
+        Uri uri = uriBuilder.build();
         String url = uri.toString();
         return url;
     }
